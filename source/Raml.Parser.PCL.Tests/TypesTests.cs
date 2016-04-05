@@ -70,7 +70,7 @@ namespace Raml.Parser.Tests
 
             Assert.AreEqual(2, raml.Types.Count);
             Assert.AreEqual("format", raml.Types["mydate"].Facets.First().Key);
-            Assert.IsTrue(raml.Types["customDate"].OtherProperties.ContainsKey("format"));
+            Assert.AreEqual("mydate", raml.Types["customDate"].Type);
         }
 
         private static async Task<RamlDocument> Parse(string filePath)
