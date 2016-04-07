@@ -15,11 +15,19 @@
 		<iconUrl>http://raml.org/images/logo.png</iconUrl>
         <tags>RAML REST API SCHEMA MARKUP</tags>
         <dependencies>
-            <dependency id="Edge.js" version="4.0.0" />
+            <dependency id="Edge.js" version="5.9.1" />
         </dependencies>
     </metadata>
     <files>
+        <file src="node_modules\raml-1-0-parser\**\*.*" target="content\dotnet\node_modules\raml-1-0-parser" />
+        <file src="node_modules\raml-1-0-parser\**\*.*" target="content\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\node_modules\raml-1-0-parser" />
         <file src="node_modules\raml-1-0-parser\**\*.*" target="content\net45\node_modules\raml-1-0-parser"/>
+        <file src="install.ps1" target="tools\dotnet"/>
+        <file src="install.ps1" target="tools\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10"/>
         <file src="install.ps1" target="tools\net45"/>
+
+        <file src="bin\Debug\Raml.Parser.PCL.dll" target="lib\dotnet"/>
+        <file src="bin\Debug\Raml.Parser.PCL.dll" target="lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10"/>
+        <file src="bin\Debug\Raml.Parser.PCL.dll" target="lib\net45"/>
     </files>
 </package>
