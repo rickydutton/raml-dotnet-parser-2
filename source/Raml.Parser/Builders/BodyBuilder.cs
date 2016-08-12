@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Raml.Parser.Expressions;
 
@@ -53,13 +54,16 @@ namespace Raml.Parser.Builders
                 ramlType = TypeBuilder.GetRamlType(new KeyValuePair<string, object>("obj", mimeType));
 		    }
 
+		    if (value.ContainsKey("application/json"))
+		        value = value["application/json"] as IDictionary<string, object>;
+
 		    return new MimeType
 			       {
                        Type = TypeExtractor.GetType(value),
                        InlineType = ramlType,
 				       Description = value.ContainsKey("description") ? (string) value["description"] : null,
-				       Example = value.ContainsKey("example") ? (string) value["example"] : null,
-				       Schema = value.ContainsKey("schema") ? (string) value["schema"] : null,
+				       Example = DynamicRamlParser.GetExample(value),
+				       Schema = GetSchema(value),
 				       FormParameters = value.ContainsKey("formParameters")
 					       ? GetParameters((IDictionary<string, object>) value["formParameters"])
 					       : null,
@@ -67,7 +71,20 @@ namespace Raml.Parser.Builders
 			       };
 		}
 
-        private IDictionary<string, Parameter> GetParameters(IDictionary<string, object> dictionary)
+	    private static string GetSchema(IDictionary<string, object> value)
+	    {
+	        if (!value.ContainsKey("schema"))
+	            return null;
+
+	        var schema = value["schema"] as object[];
+	        if (schema != null && schema.Any())
+	            return (string)schema[0];
+
+	        var asString = value["schema"] as string;
+	        return asString;
+	    }
+
+	    private IDictionary<string, Parameter> GetParameters(IDictionary<string, object> dictionary)
         {
             if (dynamicRaml == null)
                 return new Dictionary<string, Parameter>();
