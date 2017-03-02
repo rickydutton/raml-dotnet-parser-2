@@ -39,6 +39,20 @@ namespace Raml.Parser.Tests
             await parser.LoadAsync("Specifications/raml08/invalid.raml");
 		}
 
+        [Test]
+        public async Task ShouldThrowErrorLineInfo_WhenInvalidRAML()
+        {
+            try
+            {
+                var parser = new RamlParser();
+                await parser.LoadAsync("Specifications/errors/api.raml");
+            }
+            catch (FormatException ex)
+            {
+                Assert.IsTrue(ex.Message.Contains("line "));
+            }
+        }
+
 		[Test, Ignore]
 		public async Task ShouldLoad_WhenAnnotationsTargets()
 		{
@@ -335,6 +349,14 @@ namespace Raml.Parser.Tests
             var model = await parser.LoadAsync("Specifications/resource-types.raml");
             Assert.AreEqual(3, model.ResourceTypes.First().Values.First().Get.QueryParameters.Values.Count);
             Assert.AreEqual(1, model.ResourceTypes.First().Values.First().UriParameters.Count);
+        }
+
+        [Test]
+        public async Task ShouldParseSecuritySchemas()
+        {
+            var parser = new RamlParser();
+            var result = await parser.LoadAsync("Specifications/epi.raml");
+            Assert.AreEqual(1, result.SecuritySchemes.Count());
         }
     }
 }
